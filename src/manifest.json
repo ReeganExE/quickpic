@@ -1,0 +1,19 @@
+{
+  "permissions": [
+    "https://2.pik.vn/"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "19": "icon.png",
+      "38": "icon.png"
+    },
+    "default_title": "QuickPic - Quick Picture upload",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "icons": {
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
