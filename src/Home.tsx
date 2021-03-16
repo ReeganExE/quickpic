@@ -4,8 +4,8 @@ import pica from 'pica'
 
 import { About } from './About'
 
-// ᗁṯṫ⍴𝘴://𝟚.ῤᵢ𝓀.𝜈𝝶/, hide from search engines 😉
-const IMGUR_MASK = atob('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vMi5waWsudm4v').split('P{P8b4s[4.{tMAh=')[1]
+// eslint-disable-next-line prefer-destructuring
+const IMGUR_MASK = process.env.IMGUR_MASK
 
 function Home(): JSX.Element {
   const [url, setUrl] = useState<string>()
