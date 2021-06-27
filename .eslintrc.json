@@ -4,9 +4,7 @@
     "airbnb",
     "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "globals": {
     "chrome": true
@@ -16,6 +14,11 @@
   },
   "rules": {
     "prettier/prettier": "error",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "typedefs": false, "functions": false, "classes": false, "variables": false }
+    ],
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "import/extensions": [
       "error",
@@ -37,14 +40,6 @@
     "implicit-arrow-linebreak": "off",
     "consistent-return": "off",
     "react/prop-types": "off",
-    "no-use-before-define": [
-      "error",
-      {
-        "functions": false,
-        "classes": false,
-        "variables": false
-      }
-    ],
     "no-confusing-arrow": "off",
     "no-unused-expressions": "off",
     "react/jsx-one-expression-per-line": "off",

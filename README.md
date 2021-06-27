@@ -2,6 +2,8 @@
 
 Google Chrome: https://chrome.google.com/webstore/detail/gppfdihlhnkkepchiddoejpmakcloncd
 
+Image host: 𝒉𝒕𝒕𝒑𝒔://𝒖𝒑𝒂𝒏𝒉.𝒐𝒓𝒈
+
 # Development
 
 ```

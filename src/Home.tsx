@@ -3,13 +3,12 @@ import styled from 'styled-components'
 import pica from 'pica'
 
 import { About } from './About'
-
-// eslint-disable-next-line prefer-destructuring
-const IMGUR_MASK = process.env.IMGUR_MASK
+import { upload } from './upanhorg'
 
 function Home(): JSX.Element {
   const [url, setUrl] = useState<string>()
   const [status, setStatus] = useState<string>()
+  const [blob, setBlob] = useState<Blob>()
 
   const onPaste = useCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
     setStatus('')
@@ -43,6 +42,7 @@ function Home(): JSX.Element {
             const b = cv.toDataURL()
             setStatus((file.size / 1024).toFixed() + 'kB / ' + changes)
             setUrl(b)
+            cv.toBlob(setBlob)
           })
           .catch((e) => {
             console.error(e)
@@ -55,7 +55,7 @@ function Home(): JSX.Element {
   return (
     <StyledContainer onPaste={onPaste}>
       {status && <Strong>{status}</Strong>}
-      {url ? <UploadBox url={url} /> : <Placeholder>Paste an image</Placeholder>}
+      {url ? <UploadBox url={url} blob={blob} /> : <Placeholder>Paste an image</Placeholder>}
       <StyledAbout>
         <About />
       </StyledAbout>
@@ -63,7 +63,7 @@ function Home(): JSX.Element {
   )
 }
 
-const UploadBox: FC<{ url: string }> = ({ url }) => {
+const UploadBox: FC<{ url: string; blob: Blob }> = ({ url, blob }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [result, setResult] = useState<string>()
   const onFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
@@ -71,20 +71,10 @@ const UploadBox: FC<{ url: string }> = ({ url }) => {
   }, [])
   const onUpload = useCallback(() => {
     setLoading(true)
-    fetch(IMGUR_MASK, {
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      },
-      referrer: IMGUR_MASK,
-      body: 'image=' + encodeURIComponent(url),
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'omit',
-    })
-      .then((a) => a.json())
-      .then((r) => setResult(r.saved as string))
+    upload(blob)
+      .then((r) => setResult(r.url))
       .finally(() => setLoading(false))
-  }, [url])
+  }, [blob])
 
   return (
     <>
@@ -95,7 +85,7 @@ const UploadBox: FC<{ url: string }> = ({ url }) => {
       </StyledBtnContainer>
       {result && (
         <div>
-          <StyledInput onFocus={onFocus} type="text" defaultValue={IMGUR_MASK + result} />
+          <StyledInput onFocus={onFocus} type="text" defaultValue={result} />
         </div>
       )}
       <img src={url} alt="ff" width="400px" />

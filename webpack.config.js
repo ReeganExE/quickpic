@@ -61,6 +61,12 @@ function plugins() {
           .toString()
           .split('P{P8b4s[4.{tMAh=')[1]
       ),
+      'process.env.UPANH_HOST': JSON.stringify(
+        // 𝒉𝒕𝒕𝒑𝒔://𝒖𝒑𝒂𝒏𝒉.𝒐𝒓𝒈, hide from search engines 😉
+        Buffer.from('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdXBhbmgub3Jn', 'base64')
+          .toString()
+          .split('P{P8b4s[4.{tMAh=')[1]
+      ),
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
     }),
     new HtmlWebpackPlugin({
