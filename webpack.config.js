@@ -15,6 +15,7 @@ const baseManifest = require('./src/manifest.json')
 const { env } = process
 
 const DEV = env.NODE_ENV === 'development'
+const SALT = 'P{P8b4s[4.{tMAh='
 
 const pkg = {
   author: pkgjson.author,
@@ -59,24 +60,17 @@ function plugins() {
     new webpack.DefinePlugin({
       'process.env.IMGUR_MASK': JSON.stringify(
         // ᗁṯṫ⍴𝘴://𝟚.ῤᵢ𝓀.𝜈𝝶/, hide from search engines 😉
-        Buffer.from('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vMi5waWsudm4v', 'base64')
-          .toString()
-          .split('P{P8b4s[4.{tMAh=')[1]
+        salt('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vMi5waWsudm4v')
       ),
       'process.env.UPANH_HOST': JSON.stringify(
         // 𝒉𝒕𝒕𝒑𝒔://𝒖𝒑𝒂𝒏𝒉.𝒐𝒓𝒈, hide from search engines 😉
-        Buffer.from('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdXBhbmgub3Jn', 'base64')
-          .toString()
-          .split('P{P8b4s[4.{tMAh=')[1]
+        salt('UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdXBhbmgub3Jn')
       ),
       'process.env.TTVN_URL': JSON.stringify(
         // 𝓽𝓲𝓷𝓱𝓽𝓮, hide from search engines 😉
-        Buffer.from(
-          'UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdGluaHRlLnZuL2FwcGZvcm8vaW5kZXgucGhwP3RocmVhZHMvYXR0YWNobWVudHM=',
-          'base64'
+        salt(
+          'UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdGluaHRlLnZuL2FwcGZvcm8vaW5kZXgucGhwP3RocmVhZHMvYXR0YWNobWVudHM='
         )
-          .toString()
-          .split('P{P8b4s[4.{tMAh=')[1]
       ),
       'process.env.TTVN_TOKEN': JSON.stringify(env.TTVN_TOKEN),
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
@@ -96,6 +90,10 @@ function plugins() {
     }),
     DEV && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean)
+}
+
+function salt(key) {
+  return Buffer.from(key, 'base64').toString().split(SALT)[1]
 }
 
 function tsLoader() {

@@ -1,6 +1,7 @@
-import { ImageDetails } from './types'
+import axios from 'axios'
+import { ImageDetails, OnProgress } from './types'
 
-export async function upload(data: string | Blob): Promise<ImageDetails> {
+export async function upload(data: string | Blob, onProgress?: OnProgress): Promise<ImageDetails> {
   const d = {
     forum_id: '747',
   }
@@ -9,12 +10,11 @@ export async function upload(data: string | Blob): Promise<ImageDetails> {
     form.append(k, d[k])
   })
   form.append('file', data)
-  return fetch(process.env.TTVN_URL + '&oauth_token=' + process.env.TTVN_TOKEN, {
-    method: 'post',
-    body: form,
-  })
-    .then<TtvnResponse>((a) => a.json())
-    .then((r) => ({ url: r.attachment.links.permalink }))
+  return axios
+    .post<TtvnResponse>(process.env.TTVN_URL + '&oauth_token=' + process.env.TTVN_TOKEN, form, {
+      onUploadProgress: onProgress,
+    })
+    .then((r) => ({ url: r.data.attachment.links.permalink }))
 }
 
 interface TtvnResponse {

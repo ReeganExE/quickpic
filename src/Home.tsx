@@ -73,21 +73,25 @@ function Home(): JSX.Element {
 const UploadBox: FC<{ url: string; blob: Blob }> = ({ url, blob }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [result, setResult] = useState<string>()
+  const [progress, setProgress] = useState<number>(0)
   const onFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.select()
   }, [])
   const onUpload = useCallback(() => {
     setLoading(true)
-    upload(blob)
+    upload(blob, (v) => setProgress(Math.ceil((v.loaded / v.total) * 100)))
       .then((r) => setResult(r.url))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+        setProgress(0)
+      })
   }, [blob])
 
   return (
     <>
       <StyledBtnContainer>
         <button type="button" onClick={onUpload} disabled={loading}>
-          {loading ? 'Uploading ...' : 'Upload'}
+          {loading ? 'Uploading ...' + progress + '%' : 'Upload'}
         </button>
       </StyledBtnContainer>
       {result && (
