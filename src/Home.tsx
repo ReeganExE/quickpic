@@ -62,7 +62,11 @@ function Home(): JSX.Element {
   return (
     <StyledContainer onPaste={onPaste}>
       {status && <Strong>{status}</Strong>}
-      {url ? <UploadBox url={url} blob={blob} /> : <Placeholder>Paste an image</Placeholder>}
+      {url ? (
+        <UploadBox key={url} url={url} blob={blob} />
+      ) : (
+        <Placeholder>Paste an image</Placeholder>
+      )}
       <StyledAbout>
         <About />
       </StyledAbout>
@@ -79,6 +83,7 @@ const UploadBox: FC<{ url: string; blob: Blob }> = ({ url, blob }) => {
   }, [])
   const onUpload = useCallback(() => {
     setLoading(true)
+    setResult('')
     upload(blob, (v) => setProgress(Math.ceil((v.loaded / v.total) * 100)))
       .then((r) => setResult(r.url))
       .finally(() => {
