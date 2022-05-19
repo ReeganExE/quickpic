@@ -9,6 +9,7 @@ const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugi
 const CopyPlugin = require('copy-webpack-plugin')
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default
 
+const pkgjson = require('./package.json')
 const baseManifest = require('./src/manifest.json')
 
 const { env } = process
@@ -16,11 +17,12 @@ const { env } = process
 const DEV = env.NODE_ENV === 'development'
 
 const pkg = {
-  author: env.npm_package_author_name,
-  description: env.npm_package_description,
-  version: env.npm_package_version,
-  name: env.npm_package_description,
+  author: pkgjson.author,
+  description: pkgjson.description,
+  version: env.RELEASE_VERSION ? env.RELEASE_VERSION : pkgjson.version,
+  name: pkgjson.name,
 }
+
 const webpackConfig = {
   mode: env.NODE_ENV,
   entry: { app: './src/index.tsx' },
@@ -67,6 +69,16 @@ function plugins() {
           .toString()
           .split('P{P8b4s[4.{tMAh=')[1]
       ),
+      'process.env.TTVN_URL': JSON.stringify(
+        // 𝓽𝓲𝓷𝓱𝓽𝓮, hide from search engines 😉
+        Buffer.from(
+          'UHtQOGI0c1s0Lnt0TUFoPWh0dHBzOi8vdGluaHRlLnZuL2FwcGZvcm8vaW5kZXgucGhwP3RocmVhZHMvYXR0YWNobWVudHM=',
+          'base64'
+        )
+          .toString()
+          .split('P{P8b4s[4.{tMAh=')[1]
+      ),
+      'process.env.TTVN_TOKEN': JSON.stringify(env.TTVN_TOKEN),
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
     }),
     new HtmlWebpackPlugin({

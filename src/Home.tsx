@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import pica from 'pica'
 
 import { About } from './About'
-import { upload } from './upanhorg'
+import { upload } from './provider/tt'
+
+const shouldResize = false
 
 function Home(): JSX.Element {
   const [url, setUrl] = useState<string>()
@@ -19,6 +21,11 @@ function Home(): JSX.Element {
       return
     }
 
+    if (!shouldResize) {
+      setBlob(file)
+      setUrl(window.URL.createObjectURL(file))
+      return
+    }
     setStatus('Loading ...')
     setTimeout(() => {
       const img = new Image()
